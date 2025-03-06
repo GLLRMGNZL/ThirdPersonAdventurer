@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             Debug.Log("Jump");
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
     }
 
