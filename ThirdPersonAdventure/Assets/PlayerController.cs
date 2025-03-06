@@ -5,11 +5,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public Transform planet;
+    
     public float speed = 5f;
     public float jumpForce = 5f;
     public float dodgeSpeed = 5f;
     public int dodgeDuration = 30; // in frames
+    public Transform planet;
+
+    private SphereCollider planetCollider;
 
     private int dodgeDurationCounter = 0;
     private Vector3 dodgeDirection;
@@ -25,6 +28,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         input = new PlayerInput();
         input.Player.Enable();
+        planetCollider = planet.GetComponent<SphereCollider>();
     }
 
     private void OnEnable()
@@ -39,7 +43,25 @@ public class PlayerController : MonoBehaviour
         input.Player.Dodge.performed -= OnDodge;
     }
 
-    private void Update()
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider == planetCollider)
+        {
+            isGrounded = true;
+            isJumping = false;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider == planetCollider)
+        {
+            isGrounded = false;
+            isJumping = true;
+        }
+    }
+
+    /*private void Update()
     {
         // Verify if player is touching ground with RayCast
         isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.5f);
@@ -52,7 +74,7 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = true;
         }
-    }
+    }*/
 
     private void FixedUpdate()
     {
