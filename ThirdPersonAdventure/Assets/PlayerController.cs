@@ -5,9 +5,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public Transform planet;
     public float speed = 5f;
     public float jumpForce = 5f;
-    public float dodgeForce = 1f;
+    public float dodgeSpeed = 5f;
     public int dodgeDuration = 30; // in frames
 
     private int dodgeDurationCounter = 0;
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // Verify if player is touching ground with RayCast
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1f);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.5f);
 
         if (isGrounded)
         {
@@ -63,7 +64,19 @@ public class PlayerController : MonoBehaviour
 
         if (isDodging)
         {
-            rb.AddForce(dodgeDirection * dodgeForce, ForceMode.VelocityChange);
+            // Move in dodge direction (on tangent)
+            Vector3 horizontalDodge = new Vector3(dodgeDirection.x, 0, dodgeDirection.z).normalized;
+
+            // Keep player distance to planet
+            Vector3 dodgeMovement = horizontalDodge * dodgeSpeed * Time.fixedDeltaTime;
+
+            // Move player, making sure it stays in the same planet radio
+            Vector3 targetPosition = rb.position + dodgeMovement;
+            Vector3 directionToPlanet = (targetPosition - planet.position).normalized;
+            targetPosition = planet.position + directionToPlanet * Vector3.Distance(planet.position, rb.position);  // Ensure distance
+
+            rb.MovePosition(targetPosition);
+
             dodgeDurationCounter++;
 
             // After dodgeDuration, dodgeDurationCounter = 0 and return to normal movement

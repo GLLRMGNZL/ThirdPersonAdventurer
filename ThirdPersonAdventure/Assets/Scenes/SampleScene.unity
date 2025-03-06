@@ -245,9 +245,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beb1981afbb5e10499bb0210c411e0a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  planet: {fileID: 1749182793}
   speed: 5
   jumpForce: 9.5
-  dodgeForce: 1
+  dodgeSpeed: 15
   dodgeDuration: 30
 --- !u!114 &31704063
 MonoBehaviour:
@@ -605,6 +606,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7413144369440ae4fad4cc20c816a3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1749182793 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 642098337572281645, guid: 90c9dbf6bd4133e41847c01cf808909f,
+    type: 3}
+  m_PrefabInstance: {fileID: 974702338560460049}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &974702338560460049
 PrefabInstance:
   m_ObjectHideFlags: 0
