@@ -226,7 +226,7 @@ Transform:
   m_GameObject: {fileID: 31704055}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 190, z: 0}
+  m_LocalPosition: {x: 0, y: 191.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -246,9 +246,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planet: {fileID: 1749182793}
-  speed: 5
-  jumpForce: 9.5
-  dodgeSpeed: 15
+  speed: 7.81
+  jumpForce: 156.8
+  dodgeSpeed: 19.4
   dodgeDuration: 30
 --- !u!114 &31704063
 MonoBehaviour:
@@ -271,7 +271,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 31704055}
   serializedVersion: 4
-  m_Mass: 2
+  m_Mass: 40.58
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -698,7 +698,7 @@ PrefabInstance:
     - target: {fileID: 1800255481627252763, guid: 90c9dbf6bd4133e41847c01cf808909f,
         type: 3}
       propertyPath: gravity
-      value: -6.54
+      value: -260.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
