@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 dodgeDirection;
     private bool isDodging = false;
     private bool isJumping = false;
+    private bool isGrounded = false;
 
     private Rigidbody rb;
     private PlayerInput input;
@@ -35,6 +36,21 @@ public class PlayerController : MonoBehaviour
     {
         input.Player.Jump.performed -= OnJump;
         input.Player.Dodge.performed -= OnDodge;
+    }
+
+    private void Update()
+    {
+        // Verify if player is touching ground with RayCast
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1f);
+
+        if (isGrounded)
+        {
+            isJumping = false;
+        }
+        else
+        {
+            isJumping = true;
+        }
     }
 
     private void FixedUpdate()
