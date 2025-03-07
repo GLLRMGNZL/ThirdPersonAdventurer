@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float dodgeSpeed = 5f;
     public int dodgeDuration = 30; // in frames
     public Transform planet;
+    public GameObject frontView;
 
     private SphereCollider planetCollider;
 
@@ -61,21 +62,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /*private void Update()
-    {
-        // Verify if player is touching ground with RayCast
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.5f);
-
-        if (isGrounded)
-        {
-            isJumping = false;
-        }
-        else
-        {
-            isJumping = true;
-        }
-    }*/
-
     private void FixedUpdate()
     {
         // Get player input movement (joystick position)
@@ -86,17 +72,21 @@ public class PlayerController : MonoBehaviour
 
         if (isDodging)
         {
-            // Move in dodge direction (on tangent)
-            Vector3 horizontalDodge = new Vector3(dodgeDirection.x, 0, dodgeDirection.z).normalized;
+            // Calcular el movimiento del dodge
+            Vector3 dodgeMovement = dodgeDirection * dodgeSpeed * Time.fixedDeltaTime;
 
-            // Keep player distance to planet
-            Vector3 dodgeMovement = horizontalDodge * dodgeSpeed * Time.fixedDeltaTime;
-
-            // Move player, making sure it stays in the same planet radio
+            // Mantener la distancia al planeta
+            float distanceToPlanet = Vector3.Distance(rb.position, planet.position);
             Vector3 targetPosition = rb.position + dodgeMovement;
             Vector3 directionToPlanet = (targetPosition - planet.position).normalized;
-            targetPosition = planet.position + directionToPlanet * Vector3.Distance(planet.position, rb.position);  // Ensure distance
+            targetPosition = planet.position + directionToPlanet * distanceToPlanet;
 
+            // Aplicar el movimiento
+            rb.MovePosition(targetPosition);
+
+            dodgeDurationCounter++;
+
+            // Aplicar el movimiento
             rb.MovePosition(targetPosition);
 
             dodgeDurationCounter++;
@@ -139,9 +129,17 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Dodge");
 
-            // Obtain player movement direction
+            // Obtener el input del joystick
             Vector2 inputVector = input.Player.Move.ReadValue<Vector2>();
-            dodgeDirection = (transform.right * inputVector.x + transform.forward * inputVector.y).normalized;
+
+            // Convertir el input del joystick en un vector en el espacio de la cámara
+            Vector3 moveDirection = (frontView.transform.right * inputVector.x + frontView.transform.forward * inputVector.y).normalized;
+
+            // Asegurar que el movimiento no tenga componente vertical (mantenerlo en el plano del personaje)
+            moveDirection = Vector3.ProjectOnPlane(moveDirection, transform.up).normalized;
+
+            // Asignar la dirección de dodge
+            dodgeDirection = moveDirection;
 
             isDodging = true;
         }
