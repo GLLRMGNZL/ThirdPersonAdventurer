@@ -64,11 +64,17 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Get player input movement (joystick position)
-        Vector3 inputVector = input.Player.Move.ReadValue<Vector2>();
+        // Get player input movement (left joystick position)
+        Vector3 movementInputVector = input.Player.Move.ReadValue<Vector2>();
 
-        // Convert player input into Vector3
-        Vector3 moveDirection = (transform.right * inputVector.x + transform.forward * inputVector.y).normalized;
+        // Convert player input movement into Vector3
+        Vector3 moveDirection = (transform.right * movementInputVector.x + transform.forward * movementInputVector.y).normalized;
+
+        // Get player input look (right joystick position)
+        Vector3 lookInputVector = input.Player.Look.ReadValue<Vector2>();
+
+        // Convert player input movement into Vector3
+        Vector3 lookDirection = (transform.right * lookInputVector.x + transform.forward * lookInputVector.y).normalized;
 
         if (isDodging)
         {
