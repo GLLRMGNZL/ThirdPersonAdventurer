@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public GameObject frontView;
 
     private SphereCollider planetCollider;
+    private Transform cameraMainTransform;
 
     private int dodgeDurationCounter = 0;
     private Vector3 dodgeDirection;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
         input = new PlayerInput();
         input.Player.Enable();
         planetCollider = planet.GetComponent<SphereCollider>();
+        cameraMainTransform = Camera.main.transform;
     }
 
     private void OnEnable()
@@ -68,7 +70,7 @@ public class PlayerController : MonoBehaviour
         Vector3 movementInputVector = input.Player.Move.ReadValue<Vector2>();
 
         // Convert player input movement into Vector3
-        Vector3 moveDirection = (transform.right * movementInputVector.x + transform.forward * movementInputVector.y).normalized;
+        Vector3 moveDirection = (cameraMainTransform.right * movementInputVector.x + cameraMainTransform.forward * movementInputVector.y).normalized;
 
         // Get player input look (right joystick position)
         Vector3 lookInputVector = input.Player.Look.ReadValue<Vector2>();
