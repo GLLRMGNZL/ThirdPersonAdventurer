@@ -70,13 +70,13 @@ public class PlayerController : MonoBehaviour
         Vector3 movementInputVector = input.Player.Move.ReadValue<Vector2>();
 
         // Convert player input movement into Vector3
-        Vector3 moveDirection = (cameraMainTransform.right * movementInputVector.x + cameraMainTransform.forward * movementInputVector.y).normalized;
+        Vector3 moveDirection = (transform.right * movementInputVector.x + transform.forward * movementInputVector.y).normalized;
 
         // Get player input look (right joystick position)
         Vector3 lookInputVector = input.Player.Look.ReadValue<Vector2>();
 
         // Convert player input movement into Vector3
-        Vector3 lookDirection = (transform.right * lookInputVector.x + transform.forward * lookInputVector.y).normalized;
+        Vector3 lookDirection = (cameraMainTransform.right * lookInputVector.x + cameraMainTransform.forward * lookInputVector.y).normalized;
 
         if (isDodging)
         {
