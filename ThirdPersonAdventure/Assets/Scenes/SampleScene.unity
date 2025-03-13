@@ -443,15 +443,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 31704059}
   planetTransform: {fileID: 1749182793}
-  distance: 7.24
-  height: 2.2
-  smoothSpeed: 8
+  distance: 14.1
+  height: 1.5
+  smoothSpeed: 15.21
   sensitivity: {x: 2, y: 1.5}
   pitchLimits: {x: -30, y: 60}
   collisionOffset: 0.3
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
