@@ -251,7 +251,6 @@ MonoBehaviour:
   dodgeDuration: 30
   rotationSpeed: 5
   planet: {fileID: 1749182793}
-  frontView: {fileID: 690562551}
 --- !u!114 &31704063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,10 +350,10 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: -49.08
+  near clip plane: 0.01
   far clip plane: 5000
-  field of view: 40
-  orthographic: 1
+  field of view: 33
+  orthographic: 0
   orthographic size: 12.04
   m_Depth: -1
   m_CullingMask:
@@ -379,13 +378,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06929913, y: -0.83246034, z: 0.106977545, w: 0.5392247}
-  m_LocalPosition: {x: -28.373005, y: 188.46, z: -13}
+  m_LocalRotation: {x: 0.056954157, y: 0, z: 0, w: 0.9983768}
+  m_LocalPosition: {x: 0, y: 192.56, z: -9.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 28.49, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 6.53, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,31 +438,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 330585543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b96aa96c1cb80342be2dbe666be56f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowDebugText: 0
-  m_ShowCameraFrustum: 1
-  m_IgnoreTimeScale: 0
-  m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
-  m_BlendUpdateMethod: 1
-  m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
-    m_CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  m_CustomBlends: {fileID: 0}
-  m_CameraCutEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_CameraActivatedEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  playerTransform: {fileID: 31704059}
+  planetTransform: {fileID: 1749182793}
+  distance: 7.24
+  height: 2.2
+  smoothSpeed: 8
+  sensitivity: {x: 2, y: 1.5}
+  pitchLimits: {x: -30, y: 60}
+  collisionOffset: 0.3
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0

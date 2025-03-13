@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     public int dodgeDuration = 30; // in frames
     public float rotationSpeed = 5f;
     public Transform planet;
-    public GameObject frontView;
 
     private SphereCollider planetCollider;
     private Transform cameraMainTransform;
@@ -67,21 +66,28 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         // Get player input movement (left joystick position)
-        Vector3 movementInputVector = input.Player.Move.ReadValue<Vector2>();
+        Vector2 movementInput = input.Player.Move.ReadValue<Vector2>();
 
-        // Convert player input movement into Vector3
-        Vector3 moveDirection = (transform.right * movementInputVector.x + transform.forward * movementInputVector.y).normalized;
+        if (movementInput.magnitude > 0.1f && !isDodging)
+        {
+            // Calculate camera-relative movement directions
+            Vector3 cameraForward = Vector3.ProjectOnPlane(cameraMainTransform.forward, transform.up).normalized;
+            Vector3 cameraRight = Vector3.Cross(transform.up, cameraForward).normalized;
 
-        // Get player input look (right joystick position)
-        Vector3 lookInputVector = input.Player.Look.ReadValue<Vector2>();
+            // Create movement vector based on camera orientation
+            Vector3 moveDirection = (cameraRight * movementInput.x + cameraForward * movementInput.y).normalized;
 
-        // Convert player input look into Vector3
-        Vector3 lookDirection = (cameraMainTransform.right * lookInputVector.x + cameraMainTransform.forward * lookInputVector.y).normalized;
+            // Move the player
+            rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
 
-        // Rotate player
-        float targetRotation = Mathf.Atan2(lookInputVector.x, lookInputVector.z) * Mathf.Rad2Deg;
-
-        if (isDodging)
+            // Rotate player to face movement direction
+            if (moveDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection, transform.up);
+                rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            }
+        }
+        else if (isDodging)
         {
             // Dodge movement
             Vector3 dodgeMovement = dodgeDirection * dodgeSpeed * Time.fixedDeltaTime;
@@ -102,10 +108,6 @@ public class PlayerController : MonoBehaviour
                 isDodging = false;
                 dodgeDurationCounter = 0;
             }
-        }
-        else
-        {
-            rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
         }
     }
 
@@ -134,16 +136,20 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Dodge");
 
-            // Obtener el input del joystick
+            // Get joystick input
             Vector2 inputVector = input.Player.Move.ReadValue<Vector2>();
 
-            // Convertir el input del joystick en un vector en el espacio de la cámara
-            Vector3 moveDirection = (frontView.transform.right * inputVector.x + frontView.transform.forward * inputVector.y).normalized;
+            // Calculate camera-relative movement directions
+            Vector3 cameraForward = Vector3.ProjectOnPlane(cameraMainTransform.forward, transform.up).normalized;
+            Vector3 cameraRight = Vector3.Cross(transform.up, cameraForward).normalized;
 
-            // Asegurar que el movimiento no tenga componente vertical (mantenerlo en el plano del personaje)
+            // Create movement vector based on camera orientation
+            Vector3 moveDirection = (cameraRight * inputVector.x + cameraForward * inputVector.y).normalized;
+
+            // Ensure movement has no vertical component (keep it on the player's plane)
             moveDirection = Vector3.ProjectOnPlane(moveDirection, transform.up).normalized;
 
-            // Asignar la dirección de dodge
+            // Set dodge direction
             dodgeDirection = moveDirection;
 
             isDodging = true;
