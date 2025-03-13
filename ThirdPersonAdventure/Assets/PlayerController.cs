@@ -83,21 +83,15 @@ public class PlayerController : MonoBehaviour
 
         if (isDodging)
         {
-            // Calcular el movimiento del dodge
+            // Dodge movement
             Vector3 dodgeMovement = dodgeDirection * dodgeSpeed * Time.fixedDeltaTime;
 
-            // Mantener la distancia al planeta
+            // Keep distance to planet
             float distanceToPlanet = Vector3.Distance(rb.position, planet.position);
             Vector3 targetPosition = rb.position + dodgeMovement;
             Vector3 directionToPlanet = (targetPosition - planet.position).normalized;
             targetPosition = planet.position + directionToPlanet * distanceToPlanet;
 
-            // Aplicar el movimiento
-            rb.MovePosition(targetPosition);
-
-            dodgeDurationCounter++;
-
-            // Aplicar el movimiento
             rb.MovePosition(targetPosition);
 
             dodgeDurationCounter++;
