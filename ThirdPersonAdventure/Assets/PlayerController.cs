@@ -15,8 +15,9 @@ public class PlayerController : MonoBehaviour
 
      private SphereCollider planetCollider;
      private Transform cameraMainTransform;
+     private Quaternion cameraInitialLocalRotation;
 
-     private int dodgeDurationCounter = 0;
+    private int dodgeDurationCounter = 0;
      private Vector3 dodgeDirection;
      private bool isDodging = false;
      private bool isJumping = false;
@@ -32,7 +33,7 @@ public class PlayerController : MonoBehaviour
          input.Player.Enable();
          planetCollider = planet.GetComponent<SphereCollider>();
          cameraMainTransform = Camera.main.transform;
-     }
+    }
 
      private void OnEnable()
      {
@@ -69,25 +70,37 @@ public class PlayerController : MonoBehaviour
          // Get player input movement (left joystick position)
          Vector3 movementInputVector = input.Player.Move.ReadValue<Vector2>();
 
-         // Convert player input movement into Vector3
-         Vector3 moveDirection = (transform.right * movementInputVector.x + transform.forward * movementInputVector.y).normalized;
+        // Convert player input movement into Vector3
+        // Vector3 moveDirection = (transform.right * movementInputVector.x + transform.forward * movementInputVector.y).normalized;
+        Vector3 moveDirection = new Vector3(movementInputVector.x, 0, movementInputVector.y).normalized;
+        /*  3rd person rotation
+        // Get player input look (right joystick position)
+        Vector3 lookInputVector = input.Player.Look.ReadValue<Vector2>();
 
-         // Get player input look (right joystick position)
-         Vector3 lookInputVector = input.Player.Look.ReadValue<Vector2>();
+        // Convert player input look into Vector3 for 3rd person camera
+        Vector3 lookDirection = (cameraMainTransform.right * lookInputVector.x + cameraMainTransform.forward * lookInputVector.y).normalized;
 
-         // Convert player input look into Vector3
-         Vector3 lookDirection = (cameraMainTransform.right * lookInputVector.x + cameraMainTransform.forward * lookInputVector.y).normalized;
+        // Rotate player 3rd person camera
+        targetRotation = Mathf.Atan2(lookInputVector.x, lookInputVector.z) * Mathf.Rad2Deg;*/
 
-         // Rotate player
-         float targetRotation = Mathf.Atan2(lookInputVector.x, lookInputVector.z) * Mathf.Rad2Deg;
+        if (moveDirection.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
+            // Create a target rotation based on the target angle
+            Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
+
+            // Smoothly interpolate between the current rotation and the target rotation
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+        }
 
          if (isDodging)
          {
-             // Calcular el movimiento del dodge
-             Vector3 dodgeMovement = dodgeDirection * dodgeSpeed * Time.fixedDeltaTime;
+            // Calcular el movimiento del dodge
+            //Vector3 dodgeMovement = dodgeDirection * dodgeSpeed * Time.fixedDeltaTime;
+            Vector3 dodgeMovement = moveDirection * dodgeSpeed * Time.fixedDeltaTime;
 
-             // Mantener la distancia al planeta
-             float distanceToPlanet = Vector3.Distance(rb.position, planet.position);
+            // Mantener la distancia al planeta
+            float distanceToPlanet = Vector3.Distance(rb.position, planet.position);
              Vector3 targetPosition = rb.position + dodgeMovement;
              Vector3 directionToPlanet = (targetPosition - planet.position).normalized;
              targetPosition = planet.position + directionToPlanet * distanceToPlanet;
@@ -112,7 +125,7 @@ public class PlayerController : MonoBehaviour
          else
          {
              rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
-         }
+        }
      }
 
      public void OnJump(InputAction.CallbackContext context)
